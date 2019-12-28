@@ -33,11 +33,6 @@ $repositories($containerBuilder);
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
-// Add Twig
-$container->set('view', function(){
-	return new Twig(__DIR__.'/../templates', ['cache' => false]);
-});
-
 // Add a MongoDB instance
 $container->set('mongodb', function(){
 	return (new MongoDB\Client("mongodb://localhost:27017"))->daftari;
