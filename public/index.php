@@ -60,6 +60,9 @@ $journal_routes($app);
 $note_routes = require __DIR__ . '/../app/Routes/api/notes.php';
 $note_routes($app);
 
+$validation_routes = require __DIR__ . '/../app/Routes/api/validation.php';
+$validation_routes($app);
+
 /** @var bool $displayErrorDetails */
 $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 
