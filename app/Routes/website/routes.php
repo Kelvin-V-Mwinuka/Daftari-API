@@ -9,6 +9,7 @@ use Slim\App;
 
 return function (App $app) {
     $app->get('/', function (Request $req, Response $res){
-        return $this->get('view')->render($res, 'base.html');
+        $res->getBody()->write("Hello world!");
+        return $res;
     });
 };

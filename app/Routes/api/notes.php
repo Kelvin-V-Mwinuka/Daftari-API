@@ -8,7 +8,7 @@ use Slim\App;
 
 return function(App $app){
     $app->post('/api/notes/create', function(Request $req, Response $res){
-
+        // Create a new note
     });
 
     $app->get('/api/notes/retrieve', function(Request $req, Response $res){

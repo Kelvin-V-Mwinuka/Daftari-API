@@ -26,6 +26,7 @@ return function(App $app){
                     'password' => 0
                 ]
             ]);
+        $user['_id'] = (string)$user['_id'];
 
         $res->getBody()->write(json_encode($user));
         return $res;
@@ -33,26 +34,28 @@ return function(App $app){
 
     $app->post('/api/user/authenticate', function(Request $req, Response $res){
         
-        $params = $req->getParsedBody();
+        $params = $req->getQueryParams();
 
         $user = $this->get('mongodb')->users->findOne(
             // Or must be an array of arrays (each containing one condition)
             [
                 '$or' => [ 
-                    ['email' => $params['username']], 
-                    ['username' => $params['username']] 
-                ] 
+                    ['email' => $params['username']],
+                    ['username' => $params['username']]
+                ]
             ],
         );
 
         if(password_verify($params['password'], $user['password'])){
             unset($user['password']); // Remove user password from object before sending to the client
+            $user['_id'] = (string)$user['_id'];
             $res->getBody()->write(json_encode($user));
             return $res;
         }
 
         // Return 401 when authentication has failed
         $res->getBody()->write(json_encode(['message' => 'Login failed']));
-        return $res->withStatus(401);
+
+        return $res;
     });
 };

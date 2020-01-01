@@ -8,7 +8,45 @@ use Slim\App;
 
 return function(App $app){
     $app->post('/api/journals/create', function(Request $req, Response $res){
+        
         // Create a new journal
+        $body = $req->getParsedBody();
+
+        $user = $this->get('mongodb')->users->findOne([
+             '_id' => new MongoDB\BSON\ObjectID($body['user_id'])
+        ]);
+        
+        if($user != null){
+            // If user exists, save the journal using their ID
+            $insertOneResult = $this->get('mongodb')->journals->insertOne([
+                'user_id' => $user['_id'],
+                'title' => $body['title'],
+                'description' => $body['description'],
+                'private' => $body['private'],
+                'tags' => $body['tags']
+            ]);
+
+            $insertOneResult->getInsertedCount() == 1 ?
+
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'message' => 'Journal created'
+            ])) :
+
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Failed to insert journal'
+            ]));
+
+        } else {
+            // Return an error if the user does not exist
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Could not find user'
+            ]));
+        }
+
+        return $res;
     });
 
     $app->get('/api/journals/retrieve', function(Request $req, Response $res){
