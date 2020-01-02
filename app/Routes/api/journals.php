@@ -10,6 +10,7 @@ return function(App $app){
     $app->post('/api/journals/create', function(Request $req, Response $res){
         
         // Create a new journal
+        
         $body = $req->getParsedBody();
 
         $user = $this->get('mongodb')->users->findOne([
@@ -84,7 +85,9 @@ return function(App $app){
             array_push($documents, $document);
         }
 
-        $res->getBody()->write(json_encode($documents));
+        $res->getBody()->write(json_encode([
+            'journals' => $documents
+        ]));
         return $res;
     });
 

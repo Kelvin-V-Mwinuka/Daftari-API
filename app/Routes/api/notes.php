@@ -9,6 +9,44 @@ use Slim\App;
 return function(App $app){
     $app->post('/api/notes/create', function(Request $req, Response $res){
         // Create a new note
+
+        $body = $req->getParsedBody();
+
+        $user = $this->get('mongodb')->users->findOne([
+            '_id' => new MongoDB\BSON\ObjectID($body['user_id'])
+        ]);
+
+        $insertOneResult = $this->get('mongodb')->notes->insertOne([
+            'user_id' => $user['_id'],
+            'journal_id' => new MongoDB\BSON\ObjectID($body['journal_id']),
+            'title' => $body['title'],
+            'private' => $body['private'],
+            'text' => $body['text'],
+            'tags' => $body['tags']
+        ]);
+
+        $insertOneResult->getInsertedCount() == 1 ?
+        
+        $res->getBody()->write(json_encode([
+            'status' => 'Success',
+            'message' => 'Note created'
+        ])) :
+        
+        $res->getBody()->write(json_encode([
+            'status' => 'Failed',
+            'message' => 'Could not create note'
+        ])) ;
+
+        if($user != null){
+            // If user is not null, insert note
+        } else {
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Could not find user'
+            ]));
+        }
+
+        return $res;
     });
 
     $app->get('/api/notes/retrieve', function(Request $req, Response $res){
