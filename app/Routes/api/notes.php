@@ -12,13 +12,14 @@ return function(App $app){
 
         $body = $req->getParsedBody();
 
-        $user = $this->get('mongodb')->users->findOne([
-            '_id' => new MongoDB\BSON\ObjectID($body['user_id'])
-        ]);
+        // Check if journal_id is empty and leave it empty in the entry
+        $journal_id = null;
+        $body['journal_id'] == '' ?
+        $journal_id = '' : $journal_id = new MongoDB\BSON\ObjectID($body['journal_id']);
 
         $insertOneResult = $this->get('mongodb')->notes->insertOne([
-            'user_id' => $user['_id'],
-            'journal_id' => new MongoDB\BSON\ObjectID($body['journal_id']),
+            'user_id' => new MongoDB\BSON\ObjectID($body['user_id']),
+            'journal_id' => $journal_id,
             'title' => $body['title'],
             'private' => $body['private'],
             'text' => $body['text'],
@@ -37,21 +38,45 @@ return function(App $app){
             'message' => 'Could not create note'
         ])) ;
 
-        if($user != null){
-            // If user is not null, insert note
-        } else {
-            $res->getBody()->write(json_encode([
-                'status' => 'Failed',
-                'message' => 'Could not find user'
-            ]));
-        }
-
         return $res;
     });
 
     $app->get('/api/notes/retrieve', function(Request $req, Response $res){
-        /* If journal is specified, retrive all notes from journal if they belong to 
-        specified user. Otherwise, retrieve all notes that belong to the specified user. */
+        /* Retrive all notes from specified journal that belong to 
+        specified user. */
+        $params = $req->getQueryParams();
+        
+        if(array_key_exists('user_id', $params) && array_key_exists('journal_id', $params)){
+
+            $journal_id = null;
+            $params['journal_id'] == '' ?
+            $journal_id = '' : $journal_id = new MongoDB\BSON\ObjectID($params['journal_id']);
+
+            $cursor = $this->get('mongodb')->notes->find([
+                'user_id' => new MongoDB\BSON\ObjectID($params['user_id']),
+                'journal_id' => $journal_id
+            ]);
+            
+            $notes = array();
+
+            foreach($cursor as $document){
+                $document['_id'] = (string)$document['_id'];
+                array_push($notes, $document);
+            }
+
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'notes' => $notes
+            ]));
+
+        } else {
+            // If user id or journal id aren't provided, return an error
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Provide User ID AND Journal ID'
+            ]));
+        }
+        return $res;
     });
 
     $app->post('/api/notes/update', function(Request $req, Response $res){

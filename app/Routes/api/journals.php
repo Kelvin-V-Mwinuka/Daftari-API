@@ -10,7 +10,7 @@ return function(App $app){
     $app->post('/api/journals/create', function(Request $req, Response $res){
         
         // Create a new journal
-        
+
         $body = $req->getParsedBody();
 
         $user = $this->get('mongodb')->users->findOne([
@@ -78,15 +78,16 @@ return function(App $app){
             'user_id' => new MongoDB\BSON\ObjectID($params['user_id'])
         ]);
 
-        $documents = array();
+        $journals = array();
 
         foreach($cursor as $document){
             $document['_id'] = (string)$document['_id'];  // Convert document ID to string before returning
-            array_push($documents, $document);
+            array_push($journals, $document);
         }
 
         $res->getBody()->write(json_encode([
-            'journals' => $documents
+            'status' => 'Success',
+            'journals' => $journals
         ]));
         return $res;
     });
