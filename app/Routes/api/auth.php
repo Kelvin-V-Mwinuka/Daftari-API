@@ -16,7 +16,8 @@ return function(App $app){
                 'email' => $params['email'],
                 'username' => $params['username'],
                 'password' => password_hash($params['password'], PASSWORD_DEFAULT),
-                'gender' => $params['gender']
+                'gender' => $params['gender'],
+                'private' => "true"
             ]);
 
         $user = $this->get('mongodb')->users->findOne(
