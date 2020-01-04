@@ -79,6 +79,27 @@ return function(App $app){
         return $res;
     });
 
+    $app->get('/api/notes/all', function(Request $req, Response $res){
+        // Retrieve all the notes owned by the specified user
+        $params = $req->getQueryParams();
+        
+        $cursor = $this->get('mongodb')->notes->find([
+            'user_id' => new MongoDB\BSON\ObjectID($params['user_id'])
+        ]);
+
+        $notes = array();
+        foreach($cursor as $document){
+            array_push($notes, $document);
+        }
+
+        $res->getBody()->write(json_encode([
+            'status' => 'Success',
+            'notes' => $notes
+        ]));
+
+        return $res;
+    });
+
     $app->post('/api/notes/update', function(Request $req, Response $res){
         /* Update specified note with the specified information if the note
         belongs to the specified user */

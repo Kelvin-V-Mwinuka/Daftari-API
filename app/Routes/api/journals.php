@@ -53,8 +53,6 @@ return function(App $app){
     $app->get('/api/journals/retrieve', function(Request $req, Response $res){
         $params = $req->getQueryParams();
 
-        file_put_contents('test.txt', json_encode($params));
-
         if(!array_key_exists('user_id', $params)){
             $res->getBody()->write(json_encode([
                 'status' => 'Failed',
