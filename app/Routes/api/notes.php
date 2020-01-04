@@ -127,7 +127,7 @@ return function(App $app){
             );
             $res->getBody()->write(json_encode([
                 'status' => 'Success',
-                'message' => 'Note unliked'
+                'action' => 'Unliked'
             ]));
         } else {
             // If the like does not exist, place it.
@@ -137,10 +137,31 @@ return function(App $app){
             );
             $res->getBody()->write(json_encode([
                 'status' => 'Success',
-                'message' => 'Note liked'
+                'action' => 'Liked'
             ]));
         }
         
+        return $res;
+    });
+
+    $app->get('/api/notes/liked', function(Request $req, Response $res){
+        /** Get all of the user's liked notes */
+        $params = $req->getQueryParams();
+
+        $cursor = $this->get('mongodb')->notes->find([
+            'likes' => $params['user_id']
+        ]);
+
+        $notes = array();
+        
+        foreach($cursor as $document){
+            $document['_id'] = (string)$document['_id'];
+            array_push($notes, $document);
+        }
+
+        $res->getBody()->write(json_encode([
+            'notes' => $notes
+        ]));
         return $res;
     });
 };
