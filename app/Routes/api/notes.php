@@ -23,7 +23,8 @@ return function(App $app){
             'title' => $body['title'],
             'private' => $body['private'],
             'text' => $body['text'],
-            'tags' => $body['tags']
+            'tags' => $body['tags'],
+            'likes' => []
         ]);
 
         $insertOneResult->getInsertedCount() == 1 ?
@@ -107,5 +108,39 @@ return function(App $app){
 
     $app->delete('/api/notes/delete', function(Request $req, Response $res){
         /* Delete specified note if the note belongs to the specified user */
+    });
+
+    $app->post('/api/notes/like', function(Request $req, Response $res){
+        /* Create a like for the specified note using the specified user_id */
+        
+        $body = $req->getParsedBody();
+
+        $note = $this->get('mongodb')->notes->findOne([
+            '_id' => new MongoDB\BSON\ObjectID($body['note_id'])
+        ]);
+        
+        // If the like exists, remove it.
+        if(in_array($body['user_id'], (array)$note['likes'] )){
+            $this->get('mongodb')->notes->updateOne(
+                $note,
+                [ '$pull' => [ 'likes' => $body['user_id'] ] ]
+            );
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'message' => 'Note unliked'
+            ]));
+        } else {
+            // If the like does not exist, place it.
+            $this->get('mongodb')->notes->updateOne(
+                $note,
+                [ '$addToSet' => [ 'likes' => $body['user_id'] ] ]
+            );
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'message' => 'Note liked'
+            ]));
+        }
+        
+        return $res;
     });
 };
