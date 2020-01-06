@@ -62,6 +62,7 @@ return function(App $app){
 
             foreach($cursor as $document){
                 $document['_id'] = (string)$document['_id'];
+                $document['user_id'] = (string)$document['user_id'];
                 array_push($notes, $document);
             }
 
@@ -90,6 +91,8 @@ return function(App $app){
 
         $notes = array();
         foreach($cursor as $document){
+            $document['_id'] = (string)$document['_id'];
+            $document['user_id'] = (string)$document['user_id'];
             array_push($notes, $document);
         }
 
@@ -156,6 +159,7 @@ return function(App $app){
         
         foreach($cursor as $document){
             $document['_id'] = (string)$document['_id'];
+            $document['user_id'] = (string)$document['user_id'];
             array_push($notes, $document);
         }
 
