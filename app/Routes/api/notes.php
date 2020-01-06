@@ -109,8 +109,29 @@ return function(App $app){
         belongs to the specified user */
     });
 
-    $app->delete('/api/notes/delete', function(Request $req, Response $res){
+    $app->post('/api/notes/delete', function(Request $req, Response $res){
         /* Delete specified note if the note belongs to the specified user */
+        $body = $req->getParsedBody();
+        file_put_contents('test.txt', json_encode($body));
+        
+        $deleteResult = $this->get('mongodb')->notes->deleteOne([
+            '_id' => new MongoDB\BSON\ObjectID($body['note_id']),
+            'user_id' => new MongoDB\BSON\ObjectID($body['user_id'])
+        ]);
+        
+        if($deleteResult->getDeletedCount() == 1){
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'message' => 'Note deleted'
+            ]));
+        } else {
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Note could not be found'
+            ]));
+        }
+
+        return $res;
     });
 
     $app->post('/api/notes/like', function(Request $req, Response $res){
