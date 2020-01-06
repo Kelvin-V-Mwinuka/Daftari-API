@@ -107,6 +107,36 @@ return function(App $app){
     $app->post('/api/notes/update', function(Request $req, Response $res){
         /* Update specified note with the specified information if the note
         belongs to the specified user */
+        $body = $req->getParsedBody();
+
+        $updateResult = $this->get('mongodb')->notes->updateOne(
+            [
+                '_id' => new MongoDB\BSON\ObjectID($body['note_id']),
+                'user_id' => new MongoDB\BSON\ObjectID($body['user_id'])
+            ],
+            [
+                '$set' => [
+                    'title' => $body['title'], 
+                    'private' => $body['private'],
+                    'text' => $body['text'],
+                    'tags' => $body['tags']
+                ]
+            ]
+        );
+
+        if($updateResult->getModifiedCount() == 1){
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'message' => 'Note updated'
+            ]));
+        } else {
+            $res->getBody()->write(json_encode([
+                'status' => 'Failed',
+                'message' => 'Failed to update note'
+            ]));
+        }
+
+        return $res;
     });
 
     $app->post('/api/notes/delete', function(Request $req, Response $res){
