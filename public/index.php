@@ -34,7 +34,7 @@ $container = $containerBuilder->build();
 
 // Add a MongoDB instance
 $container->set('mongodb', function(){
-	return (new MongoDB\Client(getenv('MONGO_URI')))->daftari;
+	return (new MongoDB\Client(getenv('MONGODB_URI')))->daftari;
 });
 
 // Instantiate the app
