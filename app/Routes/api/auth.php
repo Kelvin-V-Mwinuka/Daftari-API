@@ -50,12 +50,18 @@ return function(App $app){
         if(password_verify($params['password'], $user['password'])){
             unset($user['password']); // Remove user password from object before sending to the client
             $user['_id'] = (string)$user['_id'];
-            $res->getBody()->write(json_encode($user));
+            $res->getBody()->write(json_encode([
+                'status' => 'Success',
+                'user' => $user
+            ]));
             return $res;
         }
 
         // Return 401 when authentication has failed
-        $res->getBody()->write(json_encode(['message' => 'Login failed']));
+        $res->getBody()->write(json_encode([
+            'status' => 'Failed',
+            'message' => 'Login failed'
+            ]));
 
         return $res;
     });

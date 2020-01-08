@@ -215,6 +215,7 @@ return function(App $app){
         }
 
         $res->getBody()->write(json_encode([
+            'status' => 'Success',
             'notes' => $notes
         ]));
         return $res;
