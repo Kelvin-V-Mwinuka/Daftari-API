@@ -6,7 +6,6 @@ use Slim\App;
 
 return function (App $app) {
     $app->add(SessionMiddleware::class);
-
     $app->add(function ($request, $handler) {
         $response = $handler->handle($request);
         return $response

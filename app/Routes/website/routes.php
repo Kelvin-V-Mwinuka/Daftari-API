@@ -9,7 +9,7 @@ use Slim\App;
 
 return function (App $app) {
     $app->get('/', function (Request $req, Response $res){
-        $res->getBody()->write("Hello world!");
+        $res->getBody()->write("Hello, world!");
         return $res;
     });
 };
