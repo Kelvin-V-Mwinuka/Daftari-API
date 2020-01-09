@@ -34,6 +34,7 @@ return function(App $app){
             'user' => $user
         ]));
 
+        $res->withHeader('Access-Control-Allow-Origin', '*');
         return $res;
     });
 
