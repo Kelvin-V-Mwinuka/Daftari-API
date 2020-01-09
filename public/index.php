@@ -84,6 +84,9 @@ register_shutdown_function($shutdownHandler);
 // Add Body Parsing Middleware
 $app->addBodyParsingMiddleware();
 
+// Add Cors Middleware
+$app->add(\App\Middleware\CorsMiddleware::class);
+
 // Add Routing Middleware
 $app->addRoutingMiddleware();
 
