@@ -7,9 +7,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 
 return function(App $app){
-    $app->options('/api/validate/username?{username:.+}', function(Request $req, Response $res){
-        $res->withHeader('Access-Control-Allow-Origin', '*');
-        $res->withStatus(200);
+    $app->options('/api/validate/email', function(Request $req, Response $res){
+        return $res;
+    });
+    $app->options('/api/validate/username', function(Request $req, Response $res){
         return $res;
     });
 };
