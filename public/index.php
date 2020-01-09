@@ -63,8 +63,8 @@ $note_routes($app);
 $validation_routes = require __DIR__ . '/../app/Routes/api/validation.php';
 $validation_routes($app);
 
-$options_routes = require __DIR__ . '/../app/Routes/api/preflight.php';
-$options_routes($app);
+//$options_routes = require __DIR__ . '/../app/Routes/api/preflight.php';
+//$options_routes($app);
 
 /** @var bool $displayErrorDetails */
 $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
