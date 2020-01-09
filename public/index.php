@@ -63,9 +63,9 @@ $note_routes($app);
 $validation_routes = require __DIR__ . '/../app/Routes/api/validation.php';
 $validation_routes($app);
 
-// Options routes
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
+// Disable CORS
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+    throw new HttpNotFoundException($request);
 });
 
 /** @var bool $displayErrorDetails */
@@ -82,15 +82,6 @@ $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 // Create Shutdown Handler
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
 register_shutdown_function($shutdownHandler);
-
-// Add CORS response headers
-$app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
-    return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
 
 // Add Body Parsing Middleware
 $app->addBodyParsingMiddleware();
