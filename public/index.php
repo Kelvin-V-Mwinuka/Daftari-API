@@ -34,8 +34,8 @@ $container = $containerBuilder->build();
 
 // Add a MongoDB instance
 $container->set('mongodb', function(){
-	// return (new MongoDB\Client(getenv('MONGODB_URI')))->daftari;
-	return (new MongoDB\Client(getenv('MONGODB_URI')))->heroku_0wd910cg;
+	//return (new MongoDB\Client(getenv('MONGODB_URI')))->daftari;
+	return (new MongoDB\Client(getenv('MONGODB_URI')))->heroku_k1pdm1jr;
 });
 
 // Instantiate the app
