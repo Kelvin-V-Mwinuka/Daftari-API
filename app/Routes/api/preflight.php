@@ -10,6 +10,7 @@ return function(App $app){
 
     $app->option('/api/validate/email', function(Request $req, Response $res){
         $res->withHeader('Access-Control-Allow-Origin', '*');
+        $res->withStatus(200);
         return $res;
     });
 
