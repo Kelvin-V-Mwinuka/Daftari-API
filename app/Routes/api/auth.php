@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 
 return function(App $app){
+
     $app->post('/api/user/register', function(Request $req, Response $res){
         
         $params = $req->getParsedBody(); // Associative array
@@ -34,7 +35,6 @@ return function(App $app){
             'user' => $user
         ]));
 
-        $res->withHeader('Access-Control-Allow-Origin', '*');
         return $res;
     });
 
