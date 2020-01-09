@@ -9,6 +9,8 @@ use Slim\App;
 return function(App $app){
 
     $app->options('/api/validate/email', function(Request $req, Response $res){
+        $res->withHeader('Access-Control-Allow-Origin', '*');
+        $res->withStatus(200);
         return $res;
     });
 
