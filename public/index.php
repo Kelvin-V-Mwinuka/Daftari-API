@@ -81,11 +81,11 @@ $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
 register_shutdown_function($shutdownHandler);
 
+// Add Cors Middleware
+$app->add(App\Middleware\CorsMiddleware::class);
+
 // Add Body Parsing Middleware
 $app->addBodyParsingMiddleware();
-
-// Add Cors Middleware
-$app->add(\App\Middleware\CorsMiddleware::class);
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();
