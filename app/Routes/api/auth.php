@@ -29,7 +29,10 @@ return function(App $app){
             ]);
         $user['_id'] = (string)$user['_id'];
 
-        $res->getBody()->write(json_encode($user));
+        $res->getBody()->write(json_encode([
+            'status' => 'Success',
+            'user' => $user
+        ]));
         return $res;
     });
 
