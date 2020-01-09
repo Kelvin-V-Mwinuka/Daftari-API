@@ -82,7 +82,7 @@ $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDet
 register_shutdown_function($shutdownHandler);
 
 // Add Cors Middleware
-$app->add(App\Middleware\CorsMiddleware::class);
+// $app->add(App\Middleware\CorsMiddleware::class);
 
 // Add Body Parsing Middleware
 $app->addBodyParsingMiddleware();
