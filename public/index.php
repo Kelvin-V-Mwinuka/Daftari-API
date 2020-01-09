@@ -63,10 +63,8 @@ $note_routes($app);
 $validation_routes = require __DIR__ . '/../app/Routes/api/validation.php';
 $validation_routes($app);
 
-// Disable CORS
-$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
-    throw new HttpNotFoundException($request);
-});
+$preflight = require __DIR__ . '/../app/Routes/api/preflight.php';
+$preflight($app);
 
 /** @var bool $displayErrorDetails */
 $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
