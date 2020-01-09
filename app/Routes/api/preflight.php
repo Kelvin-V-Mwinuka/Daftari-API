@@ -19,4 +19,4 @@ return function(App $app){
     $app->options('/api/user/register', function (Request $req, Response $res){
         return $res;
     });
-}
+};
