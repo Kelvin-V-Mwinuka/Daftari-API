@@ -33,6 +33,8 @@ return function(App $app){
             'status' => 'Success',
             'user' => $user
         ]));
+
+        $res->withHeader('Access-Control-Allow-Origin', '*');
         return $res;
     });
 
