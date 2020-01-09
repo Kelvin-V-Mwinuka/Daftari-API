@@ -8,11 +8,11 @@ use Slim\App;
 
 return function(App $app){
 
-    $app->option('/api/validate/email', function(Request $req, Response $res){
+    $app->options('/api/validate/email', function(Request $req, Response $res){
         return $res;
     });
 
-    $app->option('/api/validate/username', function(Request $req, Response $res){
+    $app->options('/api/validate/username', function(Request $req, Response $res){
         return $res;
     });
 
