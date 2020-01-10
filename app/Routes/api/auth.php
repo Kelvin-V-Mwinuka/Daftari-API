@@ -10,7 +10,9 @@ return function(App $app){
 
     $app->post('/api/user/register', function(Request $req, Response $res){
         
-        $params = $req->getParsedBody(); // Associative array
+        $params = $req->getParsedBody();
+
+        file_put_contents('test.txt', json_encode($params));
 
         $insertOneResult = $this->get('mongodb')->users->insertOne([
                 'name' => $params['name'],

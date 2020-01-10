@@ -7,21 +7,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 
 return function(App $app){
-    
-    $app->options('/api/validate/email/{email}', function(Request $req, Response $res, $args){
-        file_put_contents('test.txt', 'Options method invoked');
-        $res->withHeader('Access-Control-Allow-Origin', '*');
-        $res->withStatus(200);
-        return $res;
-    });
 
     $app->post('/api/validate/email', function(Request $req, Response $res){
        
         // Check wether the email is available
         $email = $req->getParsedBody()['email'];
         $user = $this->get('mongodb')->users->findOne(['email' => $email]);
-
-        file_put_contents('test.txt', $email);
 
         $response_object = array();
 
