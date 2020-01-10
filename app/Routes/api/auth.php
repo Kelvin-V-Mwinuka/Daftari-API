@@ -21,6 +21,8 @@ return function(App $app){
                 'private' => "true"
             ]);
 
+        file_put_contents('test.txt', 'User inserted');
+
         $user = $this->get('mongodb')->users->findOne(
             ['_id' => $insertOneResult->getInsertedID()],
             [
