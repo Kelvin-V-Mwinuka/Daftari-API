@@ -12,8 +12,6 @@ return function(App $app){
         
         $params = $req->getParsedBody();
 
-        file_put_contents('test.txt', json_encode($params));
-
         $insertOneResult = $this->get('mongodb')->users->insertOne([
                 'name' => $params['name'],
                 'email' => $params['email'],
@@ -31,6 +29,8 @@ return function(App $app){
                 ]
             ]);
         $user['_id'] = (string)$user['_id'];
+
+        file_put_contents('test.txt', json_encode($user));
 
         $res->getBody()->write(json_encode([
             'status' => 'Success',
