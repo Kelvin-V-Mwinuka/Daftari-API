@@ -37,7 +37,7 @@ $container->set('mongodb', function(){
 	if(getenv('ENV') == 'dev'){
 		return (new MongoDB\Client(getenv('MONGODB_URI')))->daftari;
 	}
-	return (new MongoDB\Client(getenv('MONGODB_URI')));
+	return (new MongoDB\Client(getenv('MONGODB_URI')))->heroku_k1pdm1jr;
 });
 
 // Instantiate the app
