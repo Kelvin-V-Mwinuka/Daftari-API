@@ -8,11 +8,20 @@ use Slim\App;
 
 return function(App $app){
     
-    $app->get('/api/validate/email', function(Request $req, Response $res){
+    $app->options('/api/validate/email/{email}', function(Request $req, Response $res, $args){
+        file_put_contents('test.txt', 'Options method invoked');
+        $res->withHeader('Access-Control-Allow-Origin', '*');
+        $res->withStatus(200);
+        return $res;
+    });
+
+    $app->post('/api/validate/email', function(Request $req, Response $res){
        
         // Check wether the email is available
-        $email = $req->getQueryParams()['email'];
+        $email = $req->getParsedBody()['email'];
         $user = $this->get('mongodb')->users->findOne(['email' => $email]);
+
+        file_put_contents('test.txt', $email);
 
         $response_object = array();
 
@@ -26,10 +35,10 @@ return function(App $app){
         return $res;
     });
 
-    $app->get('/api/validate/username', function(Request $req, Response $res){
+    $app->post('/api/validate/username', function(Request $req, Response $res){
         
         // Check whether the username is available
-        $username = $req->getQueryParams()['username'];
+        $username = $req->getParsedBody()['username'];
         $user = $this->get('mongodb')->users->findOne(['username' => $username]);
 
         $response_object = array();
