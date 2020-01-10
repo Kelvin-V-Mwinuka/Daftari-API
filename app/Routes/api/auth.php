@@ -21,8 +21,6 @@ return function(App $app){
                 'private' => "true"
             ]);
 
-        file_put_contents('test.txt', 'User inserted');
-
         $user = $this->get('mongodb')->users->findOne(
             ['_id' => $insertOneResult->getInsertedID()],
             [
@@ -31,8 +29,6 @@ return function(App $app){
                 ]
             ]);
         $user['_id'] = (string)$user['_id'];
-
-        file_put_contents('test.txt', json_encode($user));
 
         $res->getBody()->write(json_encode([
             'status' => 'Success',
